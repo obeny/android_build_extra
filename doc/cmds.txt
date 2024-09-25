@@ -1,0 +1,40 @@
+FASTBOOT
+========
+
+fastboot getvar current-slot
+fastboot set_active X
+fastboot reboot {recovery,bootloader}
+
+RECOVERY ADB BACKUP
+===================
+
+partition backup - block based
+******************************
+1. Start TWRP/OrangeFox
+ $ fastboot boot recovery.img
+2. Do not mount data!
+3. Disable MTP
+4. Enable ADB
+5. Enter ADB
+ $ adb root
+ $ adb shell
+6. Pull the file from the device
+ $ adb pull -z zstd /dev/block/by-name/<part_name> part.img
+
+partition restore - block based
+-------------------------------
+! Points 1-5 as for restore
+
+1. Push file to the device
+ $ adb push part.img /dev/block/by-name/<part_name>
+
+partition restore - NC (big size)
+---------------------------------
+! Points 1-5 as for restore
+
+1. Start nc on the device
+ # busybox nc -lp 5555 > /dev/block/by-name/<part_name>
+2. Forward TCP over ADB (on PC)
+ $ adb forward tcp:4444 tcp:5555
+3. Send file over TCP@USB
+ $ cat part.img | pv | nc -q 2 localhost 4444

@@ -1,0 +1,5 @@
+oneplus FW archive: https://github.com/luk1337/oplus_archive
+
+OP8T: https://xdaforums.com/t/oneplus-8t-rom-ota-oxygen-os-repo-of-oxygen-os-builds.4193183
+OP8Pro: https://xdaforums.com/t/oneplus-8-pro-rom-ota-oxygen-os-repo-of-oxygen-os-builds.4084315
+OP9R: https://xdaforums.com/t/oneplus-9r-rom-ota-oxygen-os-repo-of-oxygen-os-builds.4262715
