@@ -45,7 +45,7 @@ if grep -q "lineage" <<<${FILENAME} ; then
     # Lineage
     echo "Processing LineageOS JSON"
 
-    LINEAGE_VER="21.0"
+    LINEAGE_VER="$(cut -f 2 -d "-" <<<${FILENAME})"
     LINEAGE_VER_PATH="${LINEAGE_VER/./_}"
 
     cat > updater.json << EOF
@@ -63,16 +63,15 @@ if grep -q "lineage" <<<${FILENAME} ; then
   ]
 }
 EOF
-elif grep -q "Evolution" <<<${FILENAME} ; then
+elif grep -q "EvolutionX" <<<${FILENAME} ; then
     # EvolutionX
     echo "Processing EvolutionX JSON"
 
-    EVOLUTIONX_VER="$(sed -e 's/\(.*-v\)\(9\..\)\(-.*\)/\2/g' <<<${FILENAME})"
-    EVOLUTIONX_VER_PATH="9_x"
+    EVOLUTIONX_VER="$(sed -e 's/\(.*-\)\([0-9]\+\..\)\(-.*\)/\2/g' <<<${FILENAME})"
+    EVOLUTIONX_VER_PATH="$(sed -e 's/\../_x/' <<<${EVOLUTIONX_VER})"
 
-    FINGERPRINT="$(cat "${OUT_DIR}/build_fingerprint.txt")"
-    OEM="$(cut -f 1 -d '/' <<<${FINGERPRINT})"
-    DEVICE="$(cut -f 2 -d '/' <<<${FINGERPRINT})"
+    OEM="$(cut -f 1 -d '/' < "${OUT_DIR}/build_fingerprint.txt")"
+    DEVICE="$(cut -f 2 -d "|" < "${OUT_DIR}/android-info.txt")"
     BUILDTYPE="$(cat "${OUT_DIR}/system/build.prop" | grep ro.build.type | cut -d "=" -f 2)"
 
     cat > updater.json << EOF
